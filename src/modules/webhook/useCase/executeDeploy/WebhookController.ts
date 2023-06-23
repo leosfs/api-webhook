@@ -7,7 +7,7 @@ export class WebhookController {
 
     async handle(request:Request, response:Response){
 
-        await this.webhookUseCase.execute();
-        return response.status(200).json({ error: false, message:"tudo executado com sucesso"});
+        const responseWebhook = await this.webhookUseCase.execute();
+        return response.status(200).json({ error: false, message:responseWebhook});
     }
 }
