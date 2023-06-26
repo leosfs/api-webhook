@@ -28,17 +28,21 @@ export class WebhookUseCase {
       })
     }
 
-    async execute(commit:string, environment:string, author:string){
+    async execute(commit:string, environment:string, author:string, project:string){
    
     exec(this.command + `/c ${this.pathName}`, async (error: Error, stdout: any, stderr: any) => {
-      
+      const date = new Date();
+      const options = { timeZone: "America/Sao_Paulo" };
+      const brazilDate = date.toLocaleString("en-US", options);
+
         const data:MessageDeploy = {
           title:"Um novo deploy foi realizado...", 
           commit:commit, 
-          date:Date(), 
+          date:brazilDate, 
           message:"Deploy finalizado com sucesso!!",
           environment:environment, 
-          author:author
+          author:author, 
+          project:project
         };
 
         if (error) {

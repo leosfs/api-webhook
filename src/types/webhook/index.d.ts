@@ -9,5 +9,6 @@ export interface MessageDeploy {
     date:string, 
     message:string,
     environment:string,
-    author:string
+    author:string, 
+    project:string
 }
