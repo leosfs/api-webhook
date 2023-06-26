@@ -8,7 +8,6 @@ export interface MessageDeploy {
     commit:string, 
     date:string, 
     message:string,
-    messageTypes:string,
     environment:string,
     author:string
 }

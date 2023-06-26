@@ -33,19 +33,20 @@ export class WebhookUseCase {
     exec(this.command + `/c ${this.pathName}`, async (error: Error, stdout: any, stderr: any) => {
       
         const data:MessageDeploy = {
-          title:"Deploy Realizado com sucesso!", 
+          title:"Um novo deploy foi realizado...", 
           commit:commit, 
           date:Date(), 
-          message:"",
-          messageTypes:"",
+          message:"Deploy finalizado com sucesso!!",
           environment:environment, 
           author:author
         };
 
         if (error) {
           console.error(`Erro ao executar o script: ${error}`);
-
+         
+          data.message = `Erro ao executar o script: ${error}`;
           await this.sendNotification(data)
+
         }
 
         const response = {
