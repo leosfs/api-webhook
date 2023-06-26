@@ -1,4 +1,5 @@
+import { MessageDeploy } from "webhook";
 
 export interface NotificationDeploySevice {
-  sendEmail(to:string): Promise<void>;
+  sendEmail(to:string, dataMessageDeploy:MessageDeploy): Promise<void>;
 }

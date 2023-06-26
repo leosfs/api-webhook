@@ -1,7 +1,7 @@
 
 import { exec } from 'child_process';
 import { NotificationController } from '../../../email/useCase/notificationDeploy/NotificationDeployController';
-import { Exec } from 'webhook';
+import { Exec, MessageDeploy } from 'webhook';
 
 export class WebhookUseCase {
 
@@ -9,6 +9,7 @@ export class WebhookUseCase {
     public command: string | undefined
     public pathName: string | undefined
     public statusShell: Exec
+    public usersNotification: string []
 
     constructor(
       private notificationNodeMiler: NotificationController
@@ -17,15 +18,34 @@ export class WebhookUseCase {
         this.command = this.isWindows ? 'cmd' : 'sh';
         this.pathName = "updateContainer.sh"
         this.statusShell = { stdout: "", stderr: ""}
+        this.usersNotification = ["leonardoferreira.henrique1210@gmail.com"]
     }
 
-    async execute(){
+    async sendNotification(dateMessageDeply:MessageDeploy){
+
+      this.usersNotification.map((content:any) => {
+        this.notificationNodeMiler.handle(content, dateMessageDeply)
+      })
+    }
+
+    async execute(commit:string, environment:string, author:string){
    
     exec(this.command + `/c ${this.pathName}`, async (error: Error, stdout: any, stderr: any) => {
+      
+        const data:MessageDeploy = {
+          title:"Deploy Realizado com sucesso!", 
+          commit:commit, 
+          date:Date(), 
+          message:"",
+          messageTypes:"",
+          environment:environment, 
+          author:author
+        };
 
         if (error) {
           console.error(`Erro ao executar o script: ${error}`);
-          // this.notificationNodeMiler.handle("leonardoferreira.henrique1210@gmail.com")
+
+          await this.sendNotification(data)
         }
 
         const response = {
@@ -34,7 +54,7 @@ export class WebhookUseCase {
         }
 
         console.log(response);
-        // await this.notificationNodeMiler.handle("leonardoferreira.henrique1210@gmail.com")
+        await this.sendNotification(data)
         this.statusShell = response;
       });
 
