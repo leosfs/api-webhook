@@ -6,7 +6,10 @@ import { Exec, MessageDeploy } from 'webhook';
 export class WebhookUseCase {
 
     public isWindows: string | undefined | boolean
-    public command: string | undefined
+    public command: string | undefined | string | any
+    public winCommand: string[] | undefined
+    public shCommand: string[] | undefined
+    public soCommand: string | undefined
     public pathName: string | undefined
     public statusShell: Exec
     public usersNotification: string []
@@ -15,8 +18,11 @@ export class WebhookUseCase {
       private notificationNodeMiler: NotificationController
     ){
         this.isWindows = process.platform === 'win32'
-        this.command = this.isWindows ? 'cmd' : 'sh';
-        // this.pathName = "sudo ls"
+        this.soCommand = this.isWindows ? 'cmd' : 'sh';
+        this.pathName = __dirname
+        this.winCommand = ["docker ps", "echo 'teste win'"]
+        this.shCommand = ["docker ps", "echo 'teste sh'"]
+        this.command = this.soCommand == "cmd" ? this.winCommand.join(" ; ")  : this.shCommand.join(" && ")
         this.statusShell = { stdout: "", stderr: ""}
         this.usersNotification = ["leonardoferreira.henrique1210@gmail.com", "leonardo.silva@escolamobile.com.br"]
     }
@@ -26,10 +32,12 @@ export class WebhookUseCase {
         this.notificationNodeMiler.handle(content, dateMessageDeply)
       })
     }
+    
 
     async execute(commit:string, environment:string, author:string, project:string){
-      console.log(this.command)
-    exec("sudo ls", { cwd: __dirname }, async (error: Error, stdout: any, stderr: any) => {
+    console.log(this.command)
+    
+    exec(this.command, { cwd: this.pathName }, async (error: Error, stdout: any, stderr: any) => {
       
       const date = new Date();
       const options = { timeZone: "America/Sao_Paulo" };
