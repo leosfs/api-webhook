@@ -20,8 +20,8 @@ export class WebhookUseCase {
         this.isWindows = process.platform === 'win32'
         this.soCommand = this.isWindows ? 'cmd' : 'sh';
         this.pathName = __dirname
-        this.winCommand = ["docker ps", "echo 'teste win'"]
-        this.shCommand = ["docker ps", "echo 'teste sh'"]
+        this.winCommand = ["echo 'teste 1'", "echo 'teste win'"]
+        this.shCommand = ["echo 'teste 1'", "echo 'teste sh'"]
         this.command = this.soCommand == "cmd" ? this.winCommand.join(" ; ")  : this.shCommand.join(" && ")
         this.statusShell = { stdout: "", stderr: ""}
         this.usersNotification = ["leonardoferreira.henrique1210@gmail.com", "leonardo.silva@escolamobile.com.br"]
