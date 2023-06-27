@@ -32,8 +32,18 @@ export class WebhookUseCase {
    
     exec(this.command + `/c ${this.pathName}`, async (error: Error, stdout: any, stderr: any) => {
       const date = new Date();
-      const options = { timeZone: "America/Sao_Paulo" };
-      const brazilDate = date.toLocaleString("en-US", options);
+
+      const options:any = { 
+        timeZone: "America/Sao_Paulo", 
+        day: "2-digit", 
+        month: "2-digit", 
+        year: "numeric"
+      };
+
+      const brazilDate = date.toLocaleDateString("en-US", options)
+        .split('/')
+        .reverse()
+        .join('/');
 
         const data:MessageDeploy = {
           title:"Um novo deploy foi realizado...", 
