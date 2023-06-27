@@ -16,21 +16,21 @@ export class WebhookUseCase {
     ){
         this.isWindows = process.platform === 'win32'
         this.command = this.isWindows ? 'cmd' : 'sh';
-        this.pathName = "updateContainer.sh"
+        // this.pathName = "sudo ls"
         this.statusShell = { stdout: "", stderr: ""}
         this.usersNotification = ["leonardoferreira.henrique1210@gmail.com", "leonardo.silva@escolamobile.com.br"]
     }
 
     async sendNotification(dateMessageDeply:MessageDeploy){
-
       this.usersNotification.map((content:any) => {
         this.notificationNodeMiler.handle(content, dateMessageDeply)
       })
     }
 
     async execute(commit:string, environment:string, author:string, project:string){
-   
-    exec(this.command + `/c ${this.pathName}`, async (error: Error, stdout: any, stderr: any) => {
+      console.log(this.command)
+    exec("sudo ls", { cwd: __dirname }, async (error: Error, stdout: any, stderr: any) => {
+      
       const date = new Date();
       const options = { timeZone: "America/Sao_Paulo" };
       const brazilDate = date.toLocaleString("en-US", options);
