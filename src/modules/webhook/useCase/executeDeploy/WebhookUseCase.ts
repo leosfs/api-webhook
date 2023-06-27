@@ -47,7 +47,7 @@ export class WebhookUseCase {
           title:"Um novo deploy foi realizado...", 
           commit:commit, 
           date:brazilDate, 
-          message:"Deploy finalizado com sucesso!!",
+          message:"",
           environment:environment, 
           author:author, 
           project:project
@@ -58,7 +58,7 @@ export class WebhookUseCase {
          
           data.message = `Erro ao executar o script: ${error}`;
           await this.sendNotification(data)
-
+          return
         }
 
         const response = {
@@ -67,6 +67,7 @@ export class WebhookUseCase {
         }
 
         console.log(response);
+        data.message = `Script executado com sucesso: ${stdout}`;
         await this.sendNotification(data)
         this.statusShell = response;
       });
