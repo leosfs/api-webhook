@@ -18,7 +18,7 @@ export class WebhookUseCase {
         this.command = this.isWindows ? 'cmd' : 'sh';
         this.pathName = "updateContainer.sh"
         this.statusShell = { stdout: "", stderr: ""}
-        this.usersNotification = ["leonardoferreira.henrique1210@gmail.com"]
+        this.usersNotification = ["leonardoferreira.henrique1210@gmail.com", "leonardo.silva@escolamobile.com.br"]
     }
 
     async sendNotification(dateMessageDeply:MessageDeploy){
