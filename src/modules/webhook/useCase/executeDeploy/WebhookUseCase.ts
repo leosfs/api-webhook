@@ -20,24 +20,28 @@ export class WebhookUseCase {
         this.isWindows = process.platform === 'win32'
         this.soCommand = this.isWindows ? 'cmd' : 'sh';
         this.pathName = __dirname
-        this.winCommand = ["echo 'teste 1'", "echo 'teste win'"]
-        this.shCommand = ["echo 'teste 1'", "echo 'teste sh'"]
-        this.command = this.soCommand == "cmd" ? this.winCommand.join(" ; ")  : this.shCommand.join(" && ")
+        // this.winCommand = ["echo 'teste 1'", "echo 'teste win'"]
+        // this.shCommand = ["echo 'teste 1'", "echo 'teste sh'"]
+        // this.command = this.soCommand == "cmd" ? this.winCommand.join(" ; ")  : this.shCommand.join(" && ")
         this.statusShell = { stdout: "", stderr: ""}
         this.usersNotification = ["leonardoferreira.henrique1210@gmail.com", "leonardo.silva@escolamobile.com.br"]
     }
 
     async sendNotification(dateMessageDeply:MessageDeploy){
+
       this.usersNotification.map((content:any) => {
         this.notificationNodeMiler.handle(content, dateMessageDeply)
       })
     }
     
 
-    async execute(commit:string, environment:string, author:string, project:string){
-    console.log(this.command)
+    async execute(commit:string, environment:string, author:string, project:string, commands:string[]){
+
+
+    let concatCommand = this.soCommand == "cmd" ? commands.join(" ; ")  : commands.join(" && ")
+    console.log(concatCommand)
     
-    exec(this.command, { cwd: this.pathName }, async (error: Error, stdout: any, stderr: any) => {
+    exec(concatCommand, { cwd: this.pathName }, async (error: Error, stdout: any, stderr: any) => {
       
       const date = new Date();
       const options = { timeZone: "America/Sao_Paulo" };
@@ -68,7 +72,7 @@ export class WebhookUseCase {
 
         console.log(response);
         data.message = `Script executado com sucesso: ${stdout}`;
-        await this.sendNotification(data)
+        await this.sendNotification(data);
         this.statusShell = response;
       });
 
